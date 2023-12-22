@@ -206,12 +206,28 @@ function show_data() {
   let eAmount = 0;
   let wAmount = 0;
 
+  const getErrorMessage = (message) => `
+    <div style="color: red; margin: 8px; text-align: center; font-size: 32px;">${message}</b></div>
+  `;
+
+  let a = "";
+  let b = "";
+
   Used.filter((item) => {
     const time = new Date(item.recordTime);
     return time.getMonth() === currentMonth;
-  }).forEach((index) => {
-    eAmount += parseFloat(index.electric) * parseFloat(index.ePrice);
-    wAmount += parseFloat(index.water) * parseFloat(index.wPrice);
+  }).forEach((userItem) => {
+    eAmount += parseFloat(userItem.electric) * parseFloat(userItem.ePrice);
+    wAmount += parseFloat(userItem.water) * parseFloat(userItem.wPrice);
+    const time = new Date(userItem.recordTime);
+    if (date.getDate() === time.getDate()) {
+      if (parseFloat(userItem.electric) > 7) {
+        a = getErrorMessage("Cảnh báo điện năng tiêu thụ quá mức");
+      }
+      if (parseFloat(userItem.wPrice) > 1.5) {
+        b = getErrorMessage("Cảnh báo nước thụ quá mức");
+      }
+    }
   });
 
   try {
@@ -231,6 +247,8 @@ function show_data() {
       "</div>" +
       "</div>" +
       "<br>" +
+      a +
+      b +
       '<div class="box-body">' +
       '<table style="background-color: white;">' +
       '<thead style="background-color: aquamarine;">' +
@@ -408,7 +426,6 @@ function login() {
   var pass = document.getElementById("pass");
 
   const url = mainURL + "/home/" + phone.value + "/" + pass.value;
-  // console.log(url);
 
   fetch(url)
     .then((response) => response.json())
@@ -421,11 +438,6 @@ function login() {
       Email = newValue.email;
       Pass = newValue.pass;
       Used = newValue.used;
-
-      // Used.forEach(index => {
-
-      //     // console.log(index.recordTime);
-      // })
 
       var overLay = document.getElementById("overlay");
       overLay.classList.remove("over-lay");
