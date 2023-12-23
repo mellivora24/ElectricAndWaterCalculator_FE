@@ -225,7 +225,7 @@ function show_data() {
         a = getErrorMessage("Cảnh báo điện năng tiêu thụ quá mức");
       }
       if (parseFloat(userItem.wPrice) > 1.5) {
-        b = getErrorMessage("Cảnh báo nước thụ quá mức");
+        b = getErrorMessage("Cảnh báo nước tiêu thụ quá mức");
       }
     }
   });
