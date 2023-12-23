@@ -224,7 +224,7 @@ function show_data() {
       if (parseFloat(userItem.electric) > 7) {
         a = getErrorMessage("Cảnh báo điện năng tiêu thụ quá mức");
       }
-      if (parseFloat(userItem.wPrice) > 50) {
+      if (parseFloat(userItem.wPrice) > 1.8) {
         b = getErrorMessage("Cảnh báo nước tiêu thụ quá mức");
       }
     }
@@ -257,7 +257,7 @@ function show_data() {
       "<th>Ngày</th>" +
       "<th>Thời gian</th>" +
       "<th>Số điện tiêu thụ (kWh)</th>" +
-      "<th>Số nước tiêu thụ (Lit)</th>" +
+      "<th>Số nước tiêu thụ (m3)</th>" +
       "<th>Tiền điện phải trả (VNĐ)</th>" +
       "<th>Tiền nước phải trả (VNĐ)</th>" +
       "<th>Tổng (VNĐ)</th>" +
