@@ -224,7 +224,7 @@ function show_data() {
       if (parseFloat(userItem.electric) > 7) {
         a = getErrorMessage("Cảnh báo điện năng tiêu thụ quá mức");
       }
-      if (parseFloat(userItem.wPrice) > 1.5) {
+      if (parseFloat(userItem.wPrice) > 50) {
         b = getErrorMessage("Cảnh báo nước tiêu thụ quá mức");
       }
     }
