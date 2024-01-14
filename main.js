@@ -1,5 +1,27 @@
 const mainURL = "https://server-jkgp.onrender.com";
 
+function calculateTotalPriceByMonth(records) {
+  const totalPriceByMonth = {};
+
+  records.forEach((record) => {
+    const recordTime = new Date(record.recordTime);
+    const monthYearKey = `${
+      recordTime.getMonth() + 1
+    }-${recordTime.getFullYear()}`;
+
+    if (!totalPriceByMonth[monthYearKey]) {
+      totalPriceByMonth[monthYearKey] = { water: 0, electric: 0 };
+    }
+
+    totalPriceByMonth[monthYearKey].water +=
+      parseFloat(record.water) * parseFloat(record.wPrice);
+    totalPriceByMonth[monthYearKey].electric +=
+      parseFloat(record.electric) * parseFloat(record.ePrice);
+  });
+
+  return totalPriceByMonth;
+}
+
 var display = document.getElementById("flag");
 
 display.innerHTML = `        
@@ -224,7 +246,7 @@ function show_data() {
       if (parseFloat(userItem.electric) > 7) {
         a = getErrorMessage("Cảnh báo điện năng tiêu thụ quá mức");
       }
-      if (parseFloat(userItem.wPrice) > 1.8) {
+      if (parseFloat(userItem.wPrice) > 1000) {
         b = getErrorMessage("Cảnh báo nước tiêu thụ quá mức");
       }
     }
@@ -257,7 +279,7 @@ function show_data() {
       "<th>Ngày</th>" +
       "<th>Thời gian</th>" +
       "<th>Số điện tiêu thụ (kWh)</th>" +
-      "<th>Số nước tiêu thụ (m3)</th>" +
+      "<th>Số nước tiêu thụ (Lít)</th>" +
       "<th>Tiền điện phải trả (VNĐ)</th>" +
       "<th>Tiền nước phải trả (VNĐ)</th>" +
       "<th>Tổng (VNĐ)</th>" +
@@ -281,7 +303,19 @@ function show_data() {
 }
 
 function show_infor() {
-  // console.log("inf");
+  const displayReport = (message) => `
+    <div style="color: black; margin: 8px; text-align: left; font-size: 20px;">${message}</b></div>
+  `;
+
+  const totalPriceByMonth = calculateTotalPriceByMonth(Used);
+
+  const listReport = Object.keys(totalPriceByMonth)
+    .map((month) => {
+      return `${month}: water: ${totalPriceByMonth[month].water} (VNĐ) -  electric: ${totalPriceByMonth[month].electric} (VNĐ)`;
+    })
+    .map((mess) => displayReport(mess))
+    .toString();
+
   var eremove = document.querySelector(".div-add");
   if (eremove && eremove.parentNode) {
     eremove.parentNode.removeChild(eremove);
@@ -317,6 +351,7 @@ function show_infor() {
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && xhr.status == 200) {
       display.innerHTML = xhr.responseText;
+      display.innerHTML = listReport;
     }
   };
   xhr.send();
